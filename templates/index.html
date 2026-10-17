@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Усі книги</h1>
+
+<form class="search" method="get" action="{{ url_for('index') }}">
+    <input type="search" name="q" value="{{ q }}" placeholder="Пошук за назвою або автором">
+    <button type="submit" class="btn">Знайти</button>
+    {% if q %}<a href="{{ url_for('index') }}">Скинути</a>{% endif %}
+</form>
+
+{% if books %}
+<table>
+    <thead>
+        <tr>
+            <th>Назва</th>
+            <th>Автор</th>
+            <th>Рік</th>
+            <th class="actions">Дії</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr>
+            <td><a href="{{ url_for('detail', book_id=book.id) }}">{{ book.title }}</a></td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.year or "—" }}</td>
+            <td class="actions">
+                <a href="{{ url_for('edit', book_id=book.id) }}">Редагувати</a>
+                <form method="post" action="{{ url_for('delete', book_id=book.id) }}"
+                      onsubmit="return confirm('Видалити «{{ book.title|replace("'", "\\'") }}»?');">
+                    <button type="submit" class="link danger">Видалити</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% elif q %}
+<p class="empty">За запитом «{{ q }}» нічого не знайдено.</p>
+{% else %}
+<p class="empty">Книг ще немає. <a href="{{ url_for('create') }}">Додайте першу</a>.</p>
+{% endif %}
+{% endblock %}

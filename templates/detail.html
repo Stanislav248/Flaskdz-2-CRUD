@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ book.title }}</h1>
+
+<dl class="info">
+    <dt>Автор</dt><dd>{{ book.author }}</dd>
+    <dt>Рік видання</dt><dd>{{ book.year or "—" }}</dd>
+    <dt>Додано</dt><dd>{{ book.created_at }}</dd>
+    <dt>Опис</dt><dd>{{ book.description or "—" }}</dd>
+</dl>
+
+<div class="buttons">
+    <a class="btn" href="{{ url_for('edit', book_id=book.id) }}">Редагувати</a>
+    <form method="post" action="{{ url_for('delete', book_id=book.id) }}"
+          onsubmit="return confirm('Видалити цю книгу?');">
+        <button type="submit" class="btn danger">Видалити</button>
+    </form>
+    <a href="{{ url_for('index') }}">&larr; До списку</a>
+</div>
+{% endblock %}

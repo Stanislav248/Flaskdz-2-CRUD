@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}{{ "Нова книга" if mode == "create" else "Редагування" }}{% endblock %}
+
+{% block content %}
+<h1>{{ "Нова книга" if mode == "create" else "Редагування книги" }}</h1>
+
+<form method="post" class="form" novalidate
+      action="{{ url_for('create') if mode == 'create' else url_for('edit', book_id=book_id) }}">
+
+    <label>Назва *
+        <input type="text" name="title" value="{{ book.title }}" maxlength="200" required>
+        {% if errors.title %}<span class="error">{{ errors.title }}</span>{% endif %}
+    </label>
+
+    <label>Автор *
+        <input type="text" name="author" value="{{ book.author }}" maxlength="100" required>
+        {% if errors.author %}<span class="error">{{ errors.author }}</span>{% endif %}
+    </label>
+
+    <label>Рік видання
+        <input type="number" name="year" value="{{ book.year }}">
+        {% if errors.year %}<span class="error">{{ errors.year }}</span>{% endif %}
+    </label>
+
+    <label>Опис
+        <textarea name="description" rows="5" maxlength="1000">{{ book.description }}</textarea>
+        {% if errors.description %}<span class="error">{{ errors.description }}</span>{% endif %}
+    </label>
+
+    <div class="buttons">
+        <button type="submit" class="btn">Зберегти</button>
+        <a href="{{ url_for('index') }}">Скасувати</a>
+    </div>
+</form>
+{% endblock %}
